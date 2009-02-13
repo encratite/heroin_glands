@@ -1,0 +1,41 @@
+Running check_revision tests:
+
+Key 1 result: Success, checksum: 3511822d
+Key 2 result: Success, checksum: 29fb75c8
+Key 3 result: Success, checksum: 5b9f0146
+
+Running hash_d2key tests:
+
+Key 1:
+Hash: 60 e5 f9 c0 f4 21 b3 b2 a5 33 f1 f5 06 c1 d6 89 f9 34 cd 4e
+Public value: 78 40 25 00
+Key 2:
+Hash: 6b ed df 3c d9 94 7c 4b c7 ed b6 5d 59 7d 21 71 ca 5d a2 39
+Public value: e0 48 0f 00
+Key 3:
+Hash: 98 a5 9e 55 62 a2 0a be e5 1d b7 72 53 d4 4a a1 12 28 80 e6
+Public value: be 92 27 00
+Key 4:
+Hash: 60 6b dd 9a d4 e1 b7 27 6b 52 09 43 be b0 bc d0 62 0e a6 24
+Public value: 05 0f 12 00
+Key 5:
+Hash: fb cc f2 5c 27 5d fb 97 a0 f2 93 0d 87 42 31 b4 31 19 78 8e
+Public value: f1 c5 97 00
+Key 6:
+Hash: ab 10 60 0e 4f c9 16 1f 17 7e 5c 87 b9 6d 1c c7 38 37 ea 0d
+Public value: f4 57 32 00
+Key 7:
+Hash: 94 5c b9 76 6f a2 bc c6 89 c3 f8 19 65 27 e4 98 5d 6d e0 0e
+Public value: 82 06 1b 00
+Key 8:
+Hash: 93 a0 c4 d0 d9 a4 18 7e 52 cd 41 4f 33 c0 4b 6e 8b 94 38 2a
+Public value: d8 39 26 00
+
+Running double_hash tests:
+
+Password 1: 18 00 a2 a9 f0 6f ee e0 0b 66 ed ce 6a 84 3d b3 7b c4 a3 d4
+Password 2: 6b 1e 66 89 68 1d f5 c8 65 cb a5 17 83 9b aa a3 2a 8c 02 36
+Password 3: 33 fb a2 e0 a2 33 82 5b 2b 2e e4 94 0d b7 07 dc 8b 10 8a 06
+Password 4: d6 25 3d 19 f2 15 4a 77 74 f1 a0 dc 3d dd 4a ee c9 aa d3 b1
+Password 5: 90 ed 29 e5 25 60 c8 88 54 15 15 f2 52 2e 9c 51 94 64 f7 1e
+Password 6: a8 44 b8 ad a6 8c 67 76 36 63 06 b2 c1 29 35 a7 b2 7c 22 31
