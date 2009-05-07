@@ -1,9 +1,11 @@
-#include "utility.hpp"
+#include <heroin/utility.hpp>
 
 #include <iostream>
 #include <sstream>
 
 #include <nil/time.hpp>
+#include <nil/random.hpp>
+#include <nil/environment.hpp>
 
 std::string get_data_string(std::string const & data)
 {
@@ -15,6 +17,27 @@ std::string get_data_string(std::string const & data)
 		stream.fill('0');
 		stream << get_byte(data, i) << " ";
 	}
+	return stream.str();
+}
+
+std::string get_char_array_string(std::string const & data)
+{
+	std::stringstream stream;
+	bool first = true;
+	stream << "unsigned char const bytes[] = {";
+	for(std::size_t i = 0; i < data.size(); i++)
+	{
+		if(first)
+			first = false;
+		else
+			stream << ", ";
+		stream << "0x";
+		stream << std::hex;
+		stream.width(2);
+		stream.fill('0');
+		stream << get_byte(data, i);
+	}
+	stream << "};";
 	return stream.str();
 }
 
@@ -138,4 +161,100 @@ ulong get_byte(std::string const & input, std::size_t offset)
 ulong get_tick_count()
 {
 	return static_cast<ulong>(nil::boot_time());
+}
+
+std::string read_string(std::string const & packet, std::size_t & offset)
+{
+	std::size_t zero = packet.find('\x00', offset);
+	std::string output;
+	if(zero == std::string::npos)
+	{
+		zero = packet.length();
+		output = packet.substr(offset, zero - offset);
+		offset = zero;
+	}
+	else
+	{
+		output = packet.substr(offset, zero - offset);
+		offset = zero + 1;
+	}
+	return output;
+}
+
+std::string read_one_string(std::string const & packet, std::size_t offset)
+{
+	return read_string(packet, offset);
+}
+
+std::string get_character_class_string(ulong class_identifier)
+{
+	switch(class_identifier)
+	{
+		case 1: return "Amazon";
+		case 2: return "Sorceress";
+		case 3: return "Necromancer";
+		case 4: return "Paladin";
+		case 5: return "Barbarian";
+		case 6: return "Druid";
+		case 7: return "Assassin";
+		default: return "Unknown";
+	}
+}
+
+char get_upper_case_letter()
+{
+	return static_cast<char>('A' + nil::random::uint(0, 25));
+}
+
+char get_lower_case_letter()
+{
+	return static_cast<char>('a' + nil::random::uint(0, 25));
+}
+
+char get_digit()
+{
+	return static_cast<char>('0' + nil::random::uint(0, 9));
+}
+
+char get_letter(bool first)
+{
+	if(nil::random::uint(1, 36) <= 10)
+		return get_digit();
+	else
+		return first ? get_upper_case_letter() : get_lower_case_letter();
+}
+
+std::string generate_string()
+{
+	std::string output;
+	for(long i = 0; i < 15; i++)
+		output += get_letter(i == 0);
+	return output;
+}
+
+std::string construct_bncs_packet(ulong command, std::string const & arguments)
+{
+	std::string packet = "\xff" + byte_to_string(command) + word_to_string(4 + arguments.length()) + arguments;
+	return packet;
+}
+
+std::string construct_mcp_packet(ulong command, std::string const & arguments)
+{
+	std::string packet = word_to_string(3 + arguments.length()) + byte_to_string(command) + arguments;
+	return packet;
+}
+
+void fix_directory(std::string & directory)
+{
+	if(!directory.empty())
+	{
+		char last_byte = *(directory.end() - 1);
+#ifdef NIL_WINDOWS
+		char separator = '\\';
+#else
+		char separator = '/';
+#endif
+		if(last_byte != separator)
+			directory += separator;
+	}
 }

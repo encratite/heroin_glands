@@ -22,5 +22,15 @@ std::string byte_to_string(ulong input);
 std::string char_to_string(char input);
 ulong get_byte(std::string const & input, std::size_t offset);
 ulong get_tick_count();
+std::string read_string(std::string const & packet, std::size_t & offset);
+std::string read_one_string(std::string const & packet, std::size_t offset);
+std::string get_character_class_string(ulong class_identifier);
+std::string generate_string();
+
+std::string get_char_array_string(std::string const & data);
+std::string construct_bncs_packet(ulong command, std::string const & arguments);
+std::string construct_mcp_packet(ulong command, std::string const & arguments);
+
+void fix_directory(std::string & directory);
 
 #endif

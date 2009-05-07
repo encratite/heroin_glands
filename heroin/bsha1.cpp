@@ -1,8 +1,8 @@
-#include "bsha1.hpp"
+#include <heroin/bsha1.hpp>
 
 #include <nil/array.hpp>
 
-#include "utility.hpp"
+#include <heroin/utility.hpp>
 
 //code largely copied from JBLS
 
@@ -12,29 +12,29 @@ namespace
 	std::size_t const bits_per_byte = 8;
 }
 
-void set_buffer_byte(ulong * buffer, std::size_t offset, char byte)
+void set_buffer_byte(unsigned * buffer, std::size_t offset, char byte)
 {
 	std::size_t index = offset / dword_size;
-	ulong position = offset % dword_size;
-	ulong bit_offset = bits_per_byte * position;
-	ulong & dword = buffer[index];
+	unsigned position = offset % dword_size;
+	unsigned bit_offset = bits_per_byte * position;
+	unsigned & dword = buffer[index];
 	dword &= (0xff << bit_offset) ^ 0xffffffff;
 	dword |= byte << bit_offset;
 }
 
-char get_buffer_byte(ulong * buffer, std::size_t offset)
+char get_buffer_byte(unsigned * buffer, std::size_t offset)
 {
 	std::size_t index = offset / dword_size;
-	ulong position = offset % dword_size;
-	ulong bit_offset = bits_per_byte * position;
-	ulong & dword = buffer[index];
+	unsigned position = offset % dword_size;
+	unsigned bit_offset = bits_per_byte * position;
+	unsigned & dword = buffer[index];
 	return (dword >> bit_offset) & 0xff;
 }
 
-void calculate_hash(ulong * buffer)
+void calculate_hash(unsigned * buffer)
 {
-	ulong hash_buffer[80];
-	ulong hash, a, b, c, d, e, hash_buffer_offset;
+	unsigned hash_buffer[80];
+	unsigned hash, a, b, c, d, e, hash_buffer_offset;
 
 	for(std::size_t i = 0; i < 0x10; i++)
 			hash_buffer[i] = buffer[i + 5];
@@ -53,7 +53,7 @@ void calculate_hash(ulong * buffer)
 
 	hash_buffer_offset = 0;
 
-	for(ulong i = 0; i < 20; i++, hash_buffer_offset++)
+	for(unsigned i = 0; i < 20; i++, hash_buffer_offset++)
 	{
 			hash = ((a << 5) | (a >> 0x1b)) + ((~b & d) | (c & b)) + e + hash_buffer[hash_buffer_offset] + 0x5A827999;
 			e = d;
@@ -63,7 +63,7 @@ void calculate_hash(ulong * buffer)
 			a = hash;
 	}
 
-	for(ulong i = 0; i < 20; i++, hash_buffer_offset++)
+	for(unsigned i = 0; i < 20; i++, hash_buffer_offset++)
 	{
 			hash = (d ^ c ^ b) + e + ((a << 5) | (a >> 0x1b)) + hash_buffer[hash_buffer_offset] + 0x6ED9EBA1;
 			e = d;
@@ -73,7 +73,7 @@ void calculate_hash(ulong * buffer)
 			a = hash;
 	}
 
-	for(ulong i = 0; i < 20; i++, hash_buffer_offset++)
+	for(unsigned i = 0; i < 20; i++, hash_buffer_offset++)
 	{
 			hash = ((c & b) | (d & c) | (d & b)) + e + ((a << 5) | (a >> 0x1b)) + hash_buffer[hash_buffer_offset] - 0x70E44324;
 			e = d;
@@ -83,7 +83,7 @@ void calculate_hash(ulong * buffer)
 			a = hash;
 	}
 
-	for(ulong i = 0; i < 20; i++, hash_buffer_offset++)
+	for(unsigned i = 0; i < 20; i++, hash_buffer_offset++)
 	{
 			hash = ((a << 5) | (a >> 0x1b)) + e + (d ^ c ^ b) + hash_buffer[hash_buffer_offset] - 0x359D3E2A;
 			e = d;
@@ -102,7 +102,7 @@ void calculate_hash(ulong * buffer)
 
 std::string bsha1(std::string const & input)
 {
-	ulong buffer[21];
+	unsigned buffer[21];
 
 	buffer[0] = 0x67452301ul;
 	buffer[1] = 0xEFCDAB89ul;
@@ -152,3 +152,4 @@ std::string double_hash(ulong client_token, ulong server_token, std::string cons
 
 	return output;
 }
+

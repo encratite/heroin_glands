@@ -1,16 +1,16 @@
-#include "check_revision.hpp"
+#include <iostream>
 
+#include <heroin/check_revision.hpp>
+#include <heroin/utility.hpp>
 #include <nil/string.hpp>
 #include <nil/array.hpp>
 #include <nil/file.hpp>
-
-#include "utility.hpp"
 
 //code largely copied from JBLS
 
 namespace
 {
-	ulong const mpq_hash_codes[] =
+	unsigned const mpq_hash_codes[] =
 	{
 		0xE7F4CB62ul,
 		0xF6A14FFCul,
@@ -30,17 +30,17 @@ namespace
 	};
 }
 
-ulong operator_add(ulong left, ulong right)
+unsigned operator_add(unsigned left, unsigned right)
 {
 	return left + right;
 }
 
-ulong operator_sub(ulong left, ulong right)
+unsigned operator_sub(unsigned left, unsigned right)
 {
 	return left - right;
 }
 
-ulong operator_xor(ulong left, ulong right)
+unsigned operator_xor(unsigned left, unsigned right)
 {
 	return left ^ right;
 }
@@ -78,14 +78,14 @@ check_revision_result_type check_revision(std::string const & formula, std::stri
 	std::string const mpq = "ver-IX86-4.mpq";
 	*/
 
-	typedef ulong (*operator_type)(ulong, ulong);
+	typedef unsigned (*operator_type)(unsigned, unsigned);
 
 
 	//thanks to Zoxc for noticing the operator count bug
 	std::size_t const variable_count = 3;
 	std::size_t const operator_count = 4;
 
-	ulong values[variable_count];
+	unsigned values[variable_count];
 	operator_type operators[operator_count];
 
 	std::vector<std::string> tokens = nil::string::tokenise(formula, " ");
@@ -103,8 +103,8 @@ check_revision_result_type check_revision(std::string const & formula, std::stri
 			return check_revision_result_formula_error;
 		char variable_letter = token[0];
 		std::string number_string = token.substr(2);
-		ulong number;
-		if(!nil::string::string_to_number<ulong>(number_string, number))
+		unsigned number;
+		if(!nil::string::string_to_number<unsigned>(number_string, number))
 			return check_revision_result_formula_error;
 		std::size_t variable_index;
 		if(!get_variable_index(variable_letter, variable_index))
@@ -139,11 +139,11 @@ check_revision_result_type check_revision(std::string const & formula, std::stri
 	if(!get_mpq_index(mpq, mpq_index))
 		return check_revision_result_mpq_error;
 
-	ulong mpq_hash = mpq_hash_codes[mpq_index];
+	unsigned mpq_hash = mpq_hash_codes[mpq_index];
 
-	ulong a = values[0];
-	ulong b = values[1];
-	ulong c = values[2];
+	unsigned a = values[0];
+	unsigned b = values[1];
+	unsigned c = values[2];
 
 	a ^= mpq_hash;
 
@@ -151,11 +151,12 @@ check_revision_result_type check_revision(std::string const & formula, std::stri
 	{
 		std::string content;
 		std::string file = directory + d2_files[i];
+		std::cout << "Loading Diablo II binary " << file << " for hashing" << std::endl;
 		if(!nil::read_file(file, content))
 			return check_revision_result_file_error;
 		for(std::size_t j = 0; j < content.length(); j += 4)
 		{
-			ulong s = read_dword(content, j);
+			unsigned s = read_dword(content, j);
 			//A=A^S B=B+C C=C+A A=A^B
 			//the variable positions are fixed
 			a = operators[0](a, s);

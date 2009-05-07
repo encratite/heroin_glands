@@ -1,7 +1,7 @@
-#include "d2cdkey.hpp"
+#include <heroin/d2cdkey.hpp>
 
-#include "utility.hpp"
-#include "bsha1.hpp"
+#include <heroin/utility.hpp>
+#include <heroin/bsha1.hpp>
 
 #include <nil/string.hpp>
 
